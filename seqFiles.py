@@ -1,6 +1,16 @@
 #! /usr/bin/python3
-import os, sys, shutil, send2trash
+import os
+import send2trash
+import shutil
+import sys
+import PySimpleGUI as sg
 
+sg.theme('dark grey 13')
+layout = [
+    [sg.Text('Select source folder')],
+    [sg.Input(), sg.FolderBrowse()],
+    [sg.OK(), sg.Cancel()]
+]
 
 # -----------------------------------------------------------------------------------------------------
 # SYNOPSIS:
@@ -27,7 +37,7 @@ import os, sys, shutil, send2trash
 # Displays the source directory and destination directory
 # Requires confirmation before the program will continue.
 # -----------------------------------------------------------------------
-def confirmation(destfolder):
+def confirmation(destfolder): #currently doesn't use desfolder.
     totalSize = 0
     for file in currentDir:
         totalSize += os.path.getsize('./' + file)
@@ -66,6 +76,7 @@ def folderSelect():
             return newFolder, ''
 
 
+
 # -----------------------------------------------------------------------
 # Creates a folder to place the newly renamed files in.
 # Deletes a pre-existing folder if the folder name the user selected
@@ -92,12 +103,34 @@ def moveFiles(destFolder):
             num += 1
 
 
+
+def GUIMain():
+    while True:
+        event, values = window.read()
+
+        if event in (sg.WIN_CLOSED, 'Cancel'):
+            sys.exit()
+            break
+        else:
+            path = values[0]
+            if os.path.isdir(path):
+                os.makedirs(path + os.path.sep + 'output')
+
+                num = 0
+                for file in os.listdir(path):
+                    if not os.path.isdir(path + os.path.sep + file):
+                        extension = os.path.splitext(file)[1]
+                        shutil.move((path + os.path.sep + file), path + os.path.sep + 'output' + os.path.sep + str(num) + extension)
+                        num += 1
+
 # -----------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------
-currentDir = os.listdir()
-selectTuple = folderSelect()
-destFolder = selectTuple[0]
-confirmation(destFolder)
-folderCreate(selectTuple)
-moveFiles(destFolder)
-#
+window = sg.Window('Sequential File Renamer', layout)
+GUIMain()
+#currentDir = os.listdir()
+#selectTuple = folderSelect()
+#destFolder = selectTuple[0]
+#confirmation(destFolder)
+#folderCreate(selectTuple)
+#moveFiles(destFolder)
+
