@@ -126,11 +126,11 @@ def GUIMain():
 # -----------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------
 window = sg.Window('Sequential File Renamer', layout)
-GUIMain()
-#currentDir = os.listdir()
-#selectTuple = folderSelect()
-#destFolder = selectTuple[0]
-#confirmation(destFolder)
-#folderCreate(selectTuple)
-#moveFiles(destFolder)
+#GUIMain()
+currentDir = os.listdir()
+selectTuple = folderSelect()
+destFolder = selectTuple[0]
+confirmation(destFolder)
+folderCreate(selectTuple)
+moveFiles(destFolder)
 
